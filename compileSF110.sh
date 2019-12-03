@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #get SF110 benchmark sources
 wget http://www.evosuite.org/files/SF110-20130704-src.zip
 unzip SF110-20130704-src.zip

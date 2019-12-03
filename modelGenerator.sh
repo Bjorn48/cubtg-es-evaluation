@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cat modelInput.csv | while  read ligne ; do
 
 IFS=',' read -r -a array <<< "$ligne"
