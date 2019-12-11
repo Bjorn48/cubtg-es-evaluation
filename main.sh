@@ -26,6 +26,7 @@ LIMIT=$3
 search_budget=$4
 population=$5
 IFS=', ' read -r -a clone_seed <<< "$6"
+exec_count_file=$7
 
 echo "Round = $rounds"
 echo "classes file = $classes"
@@ -41,11 +42,11 @@ do
    # for each class which is indicated in the classes.csv file
    while read class project
     do
-      budget_list=(10 60 300 600)
+      budget_list=(30)
       for current_budget in "${budget_list[@]}" ; do
           printf 'Running test generation for %s\n' "$class in $project"
           echo "Budget: $current_budget"
-          . run_evosuite.sh $project $flagmodel $flagtest $clone_seed_p $class $i $population $current_budget 1 $LIMIT
+          . run_evosuite.sh $project $flagmodel $flagtest $clone_seed_p $class $i $population $current_budget 1 $LIMIT $exec_count_file
       done
 
       sleep 5

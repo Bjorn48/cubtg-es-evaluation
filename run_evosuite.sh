@@ -12,6 +12,7 @@ search_budget=$8
 
 cbehavioreval=$9
 LIMIT=${10}
+exe_count_file=${11}
 
 function waitForResources {
   sleep 20
@@ -26,7 +27,6 @@ function waitForResources {
 }
 
 projectCP=$(python python/generateProjectCP.py "bins/$project")
-echo "$LIMIT"
       if [ "$flagmodel" -eq 1 ]; then
         # model_seeding execution mode
         echo "Model seeding is on - seed_clone=$clone_seed_p"
@@ -62,76 +62,129 @@ echo "$LIMIT"
       else
         if [ "$cbehavioreval" -eq 1 ]; then
           #Common behavior executions
-          echo "Will execute EvoSuite in 7 different modes for this class"
+          echo "Will execute EvoSuite in 6 different modes for this class"
 
-          # Mode 1: plain EvoSuite
+          # Mode 1: plain MOSA
           waitForResources
-          echo "Mode 1: plain EvoSuite"
-          generatedTestDir="generated_tests/no_seeding/$search_budget/plain_es/$project-$class-$clone_seed_p-$i"
+          echo "Mode 1: plain MOSA"
+          generatedTestDir="generated_tests/cub_test_gen/fit_def_sec_def/$project-$class-$clone_seed_p-$i"
           if [ -d "$generatedTestDir" ]; then
             echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
           else
-            #java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "test.log" 2> "test.err" &
-            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/no_seeding/$search_budget/plain_es/$project-$class-$i-out.txt" 2> "logs/no_seeding/$search_budget/plain_es/$project-$class-$i-err.txt" &
-            #java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/no_seeding/plain_es/$project-$class-$i-out.txt" 2> "logs/no_seeding/plain_es/$project-$class-$i-err.txt" &
-            #java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dalgorithm=DynaMOSA -Dpopulation=$population -Dsearch_budget=$search_budget -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="generated_tests/no_seeding/$project-$class-$clone_seed_p-$i" > "logs/no_seeding/$project-$class-$i-out.txt" 2> "logs/no_seeding/$project-$class-$i-err.txt" &
+            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
+             -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_def-$i" \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH \
+             -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
+             -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_def/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_def/$project-$class-$i-err.txt" &
+
+            pid=$!
+            . finish_detection.sh "no" $population $search_budget $pid $i $project $class $generatedTestDir 1 &
           fi
 
-          # Mode 2: plain MOSA
+          # Mode 2: MOSA with max. fitness function, and max. secondary objective
           waitForResources
-          echo "Mode 2: plain MOSA"
-          generatedTestDir="generated_tests/no_seeding/$search_budget/plain_mosa/$project-$class-$clone_seed_p-$i"
+          echo "Mode 2: MOSA with max. fitness function, and max. secondary objective"
+          generatedTestDir="generated_tests/cub_test_gen/fit_max_sec_max/$project-$class-$clone_seed_p-$i"
           if [ -d "$generatedTestDir" ]; then
             echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
           else
-            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/no_seeding/$search_budget/plain_mosa/$project-$class-$i-out.txt" 2> "logs/no_seeding/$search_budget/plain_mosa/$project-$class-$i-err.txt" &
+            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
+             -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_max_sec_max-$i" \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT \
+             -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
+             -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
+             -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_max_sec_max/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_max_sec_max/$project-$class-$i-err.txt" &
+
+            pid=$!
+            . finish_detection.sh "no" $population $search_budget $pid $i $project $class $generatedTestDir 2 &
           fi
 
-
-          # Mode 3: NSGA-II with new min/max execution count fitness functions
+          # Mode 3: MOSA with min. fitness function, and min. secondary objective
           waitForResources
-          echo "Mode 3: NSGA-II with new min/max execution count fitness functions"
-          echo "Not yet implemented"
-
-          # Mode 4: MOSA with max. fitness function, and max. secondary objective
-          waitForResources
-          echo "Mode 4: MOSA with max. fitness function, and max. secondary objective"
-          generatedTestDir="generated_tests/no_seeding/$search_budget/fit_max_sec_max/$project-$class-$clone_seed_p-$i"
+          echo "Mode 3: MOSA with min. fitness function, and min. secondary objective"
+          generatedTestDir="generated_tests/cub_test_gen/fit_min_sec_min/$project-$class-$clone_seed_p-$i"
           if [ -d "$generatedTestDir" ]; then
             echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
           else
-            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dexe_count_file="/app/non-existing-file" -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/no_seeding/$search_budget/fit_max_sec_max/$project-$class-$i-out.txt" 2> "logs/no_seeding/$search_budget/fit_max_sec_max/$project-$class-$i-err.txt" &
+            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
+             -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_min_sec_min-$i" \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT \
+             -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
+             -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
+             -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_min_sec_min/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_min_sec_min/$project-$class-$i-err.txt" &
+
+            pid=$!
+            . finish_detection.sh "no" $population $search_budget $pid $i $project $class $generatedTestDir 3 &
           fi
 
-          # Mode 5: MOSA with min. fitness function, and min. secondary objective
+          # Mode 4: MOSA with default fitness function, and max. secondary objective
           waitForResources
-          echo "Mode 5: MOSA with min. fitness function, and min. secondary objective"
-          generatedTestDir="generated_tests/no_seeding/$search_budget/fit_min_sec_min/$project-$class-$clone_seed_p-$i"
+          echo "Mode 4: MOSA with default fitness function, and max. secondary objective"
+          generatedTestDir="generated_tests/cub_test_gen/fit_def_sec_max/$project-$class-$clone_seed_p-$i"
           if [ -d "$generatedTestDir" ]; then
             echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
           else
-            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dexe_count_file="/app/non-existing-file" -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/no_seeding/$search_budget/fit_min_sec_min/$project-$class-$i-out.txt" 2> "logs/no_seeding/$search_budget/fit_min_sec_min/$project-$class-$i-err.txt" &
+            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
+             -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_max-$i" \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH \
+             -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
+             -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
+             -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_max/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_max/$project-$class-$i-err.txt" &
+
+            pid=$!
+            . finish_detection.sh "no" $population $search_budget $pid $i $project $class $generatedTestDir 4 &
           fi
 
-          # Mode 6: MOSA with min+max fitness functions, and max. secondary objective
+          # Mode 5: MOSA with default fitness function, and min. secondary objective
           waitForResources
-          echo "Mode 6: MOSA with min+max fitness functions, and max. secondary objective"
-          generatedTestDir="generated_tests/no_seeding/$search_budget/fit_max_min_sec_max/$project-$class-$clone_seed_p-$i"
+          echo "Mode 5: MOSA with default fitness function, and min. secondary objective"
+          generatedTestDir="generated_tests/cub_test_gen/fit_def_sec_min/$project-$class-$clone_seed_p-$i"
           if [ -d "$generatedTestDir" ]; then
             echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
           else
-            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dexe_count_file="/app/non-existing-file" -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT:MIN_EXEC_COUNT -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/no_seeding/$search_budget/fit_max_min_sec_max/$project-$class-$i-out.txt" 2> "logs/no_seeding/$search_budget/fit_max_min_sec_max/$project-$class-$i-err.txt" &
+            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
+             -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_min-$i" \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH \
+             -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
+             -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
+             -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_min/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_min/$project-$class-$i-err.txt" &
+
+            pid=$!
+            . finish_detection.sh "no" $population $search_budget $pid $i $project $class $generatedTestDir 5 &
           fi
 
-          # Mode 7: MOSA with min+max fitness functions, and min. secondary objective
+          # Mode 6: MOSA with max+min fitness function, default secondary objective
           waitForResources
-          echo "Mode 7: MOSA with min+max fitness functions, and min. secondary objective"
-          generatedTestDir="generated_tests/no_seeding/$search_budget/fit_max_min_sec_min/$project-$class-$clone_seed_p-$i"
+          echo "Mode 6: MOSA with max+min fitness function, default secondary objective"
+          generatedTestDir="generated_tests/cub_test_gen/fit_max_min_sec_def/$project-$class-$clone_seed_p-$i"
           if [ -d "$generatedTestDir" ]; then
             echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
           else
-            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dexe_count_file="/app/non-existing-file" -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT:MIN_EXEC_COUNT -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/no_seeding/$search_budget/fit_max_min_sec_min/$project-$class-$i-out.txt" 2> "logs/no_seeding/$search_budget/fit_max_min_sec_min/$project-$class-$i-err.txt" &
+            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
+             -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_max_min_sec_def-$i" \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT:MIN_EXEC_COUNT \
+             -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
+             -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_max_min_sec_def/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_max_min_sec_def/$project-$class-$i-err.txt" &
+
+            pid=$!
+            . finish_detection.sh "no" $population $search_budget $pid $i $project $class $generatedTestDir 6 &
           fi
+
+
+          # Mode x: NSGA-II with new min/max execution count fitness functions
+          # waitForResources
+          # echo "Mode 3: NSGA-II with new min/max execution count fitness functions"
+          # echo "Not yet implemented"
+
+          # Mode x: plain EvoSuite
+          #waitForResources
+          #echo "Mode 1: plain EvoSuite"
+          #generatedTestDir="generated_tests/no_seeding/$search_budget/plain_es/$project-$class-$clone_seed_p-$i"
+          #if [ -d "$generatedTestDir" ]; then
+          #  echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
+          #else
+          #  java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -Dstop_zero=false -Dshow_progress=FALSE  -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/no_seeding/$search_budget/plain_es/$project-$class-$i-out.txt" 2> "logs/no_seeding/$search_budget/plain_es/$project-$class-$i-err.txt" &
+          #fi
 
         else
           # no_seeding execution mode
