@@ -2,3 +2,9 @@ org.jabref.logic.bibtexkeypattern.BracketedPattern,111_jabref
 org.jabref.gui.BasePanel,111_jabref
 org.jabref.gui.JabRefFrame,111_jabref
 org.jabref.logic.layout.format.RTFChars,111_jabref
+org.jabref.gui.openoffice.OOBibBase
+org.jabref.logic.layout.LayoutEntry
+org.jabref.preferences.JabRefPreferences
+org.jabref.logic.bst.VM
+org.jabref.model.strings.StringUtil
+org.jabref.logic.openoffice.OOBibStyle
