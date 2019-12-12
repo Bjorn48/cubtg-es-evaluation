@@ -42,18 +42,18 @@ do
    # for each class which is indicated in the classes.csv file
    while read class project
     do
-      budget_list=(30)
+      budget_list=(180)
       for current_budget in "${budget_list[@]}" ; do
           printf 'Running test generation for %s\n' "$class in $project"
           echo "Budget: $current_budget"
           . run_evosuite.sh $project $flagmodel $flagtest $clone_seed_p $class $i $population $current_budget 1 $LIMIT $exec_count_file
       done
 
-      sleep 5
+      sleep 1
       # If the number of active processes reaches the limit, we will wait, in the following loop, until the end of one of the EvoSuite executions.
       while (( $(pgrep -l java | wc -l) >= $LIMIT ))
       do
-        sleep 5
+        sleep 1
       done
       
     done < "$classes"

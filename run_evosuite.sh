@@ -15,14 +15,14 @@ LIMIT=${10}
 exe_count_file=${11}
 
 function waitForResources {
-  sleep 20
+  sleep 1
   echo "Current #java processes:"
   echo $(pgrep -l java | wc -l)
   # If the number of active processes reaches the limit, we will wait, in the following loop, until the end of one of the EvoSuite executions.
   while (( $(pgrep -l java | wc -l) >= $LIMIT ))
   do
-    echo $(pgrep -l java | wc -l)
-    sleep 20
+    #echo $(pgrep -l java | wc -l)
+    sleep 1
   done
 }
 
