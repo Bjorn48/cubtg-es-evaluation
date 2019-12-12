@@ -73,7 +73,7 @@ projectCP=$(python python/generateProjectCP.py "bins/$project")
           else
             java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
              -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_def-$i" \
-             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
              -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
              -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_def/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_def/$project-$class-$i-err.txt" &
 
@@ -90,7 +90,7 @@ projectCP=$(python python/generateProjectCP.py "bins/$project")
           else
             java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
              -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_max_sec_max-$i" \
-             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT -Dsearch_budget=$search_budget \
              -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
              -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
              -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_max_sec_max/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_max_sec_max/$project-$class-$i-err.txt" &
@@ -108,7 +108,7 @@ projectCP=$(python python/generateProjectCP.py "bins/$project")
           else
             java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
              -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_min_sec_min-$i" \
-             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
              -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
              -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
              -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_min_sec_min/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_min_sec_min/$project-$class-$i-err.txt" &
@@ -126,7 +126,7 @@ projectCP=$(python python/generateProjectCP.py "bins/$project")
           else
             java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
              -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_max-$i" \
-             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
              -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
              -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
              -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_max/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_max/$project-$class-$i-err.txt" &
@@ -144,7 +144,7 @@ projectCP=$(python python/generateProjectCP.py "bins/$project")
           else
             java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
              -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_min-$i" \
-             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
              -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
              -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
              -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_min/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_min/$project-$class-$i-err.txt" &
@@ -162,7 +162,7 @@ projectCP=$(python python/generateProjectCP.py "bins/$project")
           else
             java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
              -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_max_min_sec_def-$i" \
-             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT:MIN_EXEC_COUNT \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
              -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
              -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_max_min_sec_def/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_max_min_sec_def/$project-$class-$i-err.txt" &
 
@@ -171,10 +171,41 @@ projectCP=$(python python/generateProjectCP.py "bins/$project")
           fi
 
 
-          # Mode x: NSGA-II with new min/max execution count fitness functions
-          # waitForResources
-          # echo "Mode 3: NSGA-II with new min/max execution count fitness functions"
-          # echo "Not yet implemented"
+          # Mode 7: NSGA-II with max. execution count fitness functions + max. secondary objective
+          waitForResources
+          echo "Mode 7: NSGA-II with max. execution count fitness functions + max. secondary objective"
+          generatedTestDir="generated_tests/cub_test_gen/nsgaii_max/$project-$class-$clone_seed_p-$i"
+          if [ -d "$generatedTestDir" ]; then
+            echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
+          else
+            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -Dalgorithm=NSGAII -Dstop_zero=false \
+             -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-nsgaii_max-$i" \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT -Dsearch_budget=$search_budget \
+             -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
+             -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
+             -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/nsgaii_max/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/nsgaii_max/$project-$class-$i-err.txt" &
+
+            pid=$!
+            . finish_detection.sh "no" $population $search_budget $pid $i $project $class $generatedTestDir 7 &
+          fi
+
+          # Mode 8: NSGA-II with min. execution count fitness functions + min. secondary objective
+          waitForResources
+          echo "Mode 8: NSGA-II with min. execution count fitness functions + min. secondary objective"
+          generatedTestDir="generated_tests/cub_test_gen/nsgaii_min/$project-$class-$clone_seed_p-$i"
+          if [ -d "$generatedTestDir" ]; then
+            echo "Skip execution because of existing generated test: class= $class, project= $project, execution_idx= $i, modelFlag=$flagmodel, TestFlag=$flagtest"
+          else
+            java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -Dalgorithm=NSGAII -Dstop_zero=false \
+             -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-nsgaii_min-$i" \
+             -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
+             -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
+             -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount \
+             -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/nsgaii_min/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/nsgaii_min/$project-$class-$i-err.txt" &
+
+            pid=$!
+            . finish_detection.sh "no" $population $search_budget $pid $i $project $class $generatedTestDir 8 &
+          fi
 
           # Mode x: plain EvoSuite
           #waitForResources
