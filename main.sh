@@ -13,6 +13,8 @@ echo "LIMIT = $LIMIT"
 for ((i=1;i<=$rounds;i++));
 do
  echo "Round $i experiment"
+
+ IFS=,
  # for each class which is indicated in the classes.csv file
  while read class project
   do
