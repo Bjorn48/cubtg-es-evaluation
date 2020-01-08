@@ -8,10 +8,8 @@ RUN         dnf install java-1.8.0-openjdk-devel --assumeyes
 RUN         dnf install java-1.8.0-openjdk-openjfx --assumeyes
 RUN         dnf install java-1.8.0-openjdk-openjfx-devel --assumeyes
 RUN         dnf install procps --assumeyes
-RUN         dnf install findutils --assumeyes
 
 WORKDIR	  	/app
 COPY		    . /app/
-RUN         touch non-existing-file
 
 ENTRYPOINT    ["./docker_main.sh"]
