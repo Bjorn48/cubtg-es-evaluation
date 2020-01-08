@@ -1,28 +1,11 @@
 #!/bin/bash
 
-type=$1
-population=$2
-search_budget=$3
-pid=$4
-execution_idx=$5
-project=$6
-class=$7
-flagmodel=0
-flagtest=0
-if [ "$type" != "no" ]; then
-  clone_seed_p=$8
-  resultDir=$9
-  if [ "$type" == "model" ]; then
-    flagmodel=1
-  else
-    flagtest=1
-  fi
-else
-  clone_seed_p=0
-  resultDir=$8
-fi
-
-configurationId=$9
+pid=$1
+execution_idx=$2
+project=$3
+class=$4
+resultDir=$5
+configurationId=$6
 
 
 # Wait until the process with the passed pid ends.
@@ -31,8 +14,8 @@ while kill -0 "$pid"; do
 done
 
 if [ -d "$resultDir" ]; then
-echo "Finished: class= $class, project= $project, execution_idx= $execution_idx, modelFlag=$flagmodel, TestFlag=$flagtest, configurationId=$configurationId"
+echo "Finished: class= $class, project= $project, execution_idx= $execution_idx, configurationId=$configurationId"
 else
   # Check the root of problem
-    echo "Problem: class= $class, project= $project, execution_idx= $execution_idx, modelFlag=$flagmodel, TestFlag=$flagtest, configurationId=$configurationId"
+    echo "Problem: class= $class, project= $project, execution_idx= $execution_idx, configurationId=$configurationId"
 fi

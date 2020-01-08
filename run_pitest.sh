@@ -15,9 +15,9 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
     # Collect all of the useful stuff like project name, target class, etc.
     echo "Processing file '$scaffoldingTest'"
     IFS='/' read -r -a dirs <<< "$scaffoldingTest"
-    seeding_type="${dirs[1]}"
-    echo "type: "$seeding_type
-    folderName="${dirs[2]}"
+    configuration="${dirs[2]}"
+    echo "configuration: "$configuration
+    folderName="${dirs[3]}"
     IFS='-' read -r -a usefulStuff <<< "$folderName"
     project_name="${usefulStuff[0]}"
     target_class="${usefulStuff[1]}"
@@ -33,7 +33,7 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
     # 1- Compile scaffolding
     javac -cp "$projectCP$test_execution_libs" $scaffoldingTest
     testDir=$(dirname $scaffoldingTest)
-    scaffodlingClassPathEntryDir="generated_tests/$seeding_type/$folderName"
+    scaffodlingClassPathEntryDir="generated_tests/cub_test_gen/$configuration/$folderName"
     find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
 
       # 2- Compile the main test
@@ -69,7 +69,7 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
         # 5- Run pitest
         classPaths="$projectCP$test_execution_libs$scaffodlingClassPathEntryDir:$pitestLibs"
         sourceDirs="sources/$project_name/src"
-        outDir="pitest/out/$seeding_type/$project_name-$target_class-$clone_seed_p-$execution_id"
+        outDir="pitest/out/cub_test_gen/$configuration/$project_name-$target_class-$clone_seed_p-$execution_id"
         mutableCPs=$(python pitest/scripts/python/export_mutable_cps.py $projectCP)
 
 
