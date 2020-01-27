@@ -32,7 +32,7 @@ proc_tests=0
 find generated_tests -type f -name "*_scaffolding.java" | while read scaffoldingTest; do
     waitForResources
     ((proc_tests+=1))
-    echo "Processing test: $proc_tests / num_tests"
+    echo "Processing test: $proc_tests / $num_tests"
 
     # Collect all of the useful stuff like project name, target class, etc.
     echo "Processing file '$scaffoldingTest'"
