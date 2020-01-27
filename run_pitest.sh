@@ -1,5 +1,8 @@
 #!/bin/bash
 
+LIMIT=$1
+proc_threads=$2
+
 RunLimit=5
 
 # Check if an array contains the given element
@@ -10,8 +13,27 @@ containsElement () {
   return 0
 }
 
+function waitForResources {
+  sleep 1
+  echo "Current #java processes:"
+  echo $(pgrep -l java | wc -l)
+  echo "Continuing once below $((LIMIT-(proc_threads-1)))"
+  # If the number of active processes reaches the limit, we will wait, in the following loop, until the end of one of the EvoSuite executions.
+  while (( $(pgrep -l java | wc -l) >= $((LIMIT-(proc_threads-1))) ))
+  do
+    sleep 1
+  done
+}
+
 # A loop for running pit on all of the generated tests cases by botsing
+num_tests=$(find generated_tests -type f -name "*_scaffolding.java" | wc -l)
+proc_tests=0
+
 find generated_tests -type f -name "*_scaffolding.java" | while read scaffoldingTest; do
+    waitForResources
+    ((proc_tests+=1))
+    echo "Processing test: $proc_tests / num_tests"
+
     # Collect all of the useful stuff like project name, target class, etc.
     echo "Processing file '$scaffoldingTest'"
     IFS='/' read -r -a dirs <<< "$scaffoldingTest"
@@ -82,7 +104,8 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
       --sourceDirs $sourceDirs \
       --mutators ALL \
       --timestampedReports=false \
-      --outputFormats "HTML,XML,CSV"
+      --outputFormats "HTML,XML,CSV" \
+      --threads $proc_threads > "logs-pitest/cub-test-gen/$configuration/$folderName.log" 2> "logs-pitest/cub-test-gen/$configuration/$folderName.err" &
     #   done
     done
 done
