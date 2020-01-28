@@ -56,9 +56,11 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
     test_execution_libs=$(ls -p "$PWD/pitest/libs/test_execution/"* | tr '\n' ':')
 
     # 1- Compile scaffolding
+    javac -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" $mainTest
     testDir=$(dirname $scaffoldingTest)
     scaffodlingClassPathEntryDir="generated_tests/cub_test_gen/$configuration/$folderName"
     find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
+      javac -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" $mainTest
 
          pitestLibs=$(ls -d -1 "pitest/libs/pitest/"* | tr '\n' ':')
 
