@@ -1,6 +1,7 @@
 .*
 !.gitignore
 !.dockerignore
+!.keep
 
 # Execution logs
 logs/*
