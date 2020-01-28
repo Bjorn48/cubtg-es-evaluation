@@ -24,6 +24,8 @@ function waitForResources {
   do
     sleep 1
   done
+  echo "Enough resources to continue, current #java processes:"
+  echo $(pgrep -l java | wc -l)
 }
 
 # A loop for running pit on all of the generated tests cases by botsing
