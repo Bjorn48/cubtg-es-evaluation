@@ -17,15 +17,15 @@ containsElement () {
 function waitForResources {
   sleep 1
   echo "Current #java processes:"
-  echo $(pgrep -l java | wc -l)
-  echo "Continuing once below $((LIMIT-(proc_threads-1)))"
+  echo $(pgrep -u $user_id -l java | wc -l)
+  echo "Continuing once below $LIMIT"
   # If the number of active processes reaches the limit, we will wait, in the following loop, until the end of one of the EvoSuite executions.
-  while (( $(pgrep -u $user_id -l java | wc -l) >= $((LIMIT-(proc_threads-1))) ))
+  while (( $(pgrep -u $user_id -l java | wc -l) >= $LIMIT ))
   do
     sleep 1
   done
   echo "Enough resources to continue, current #java processes:"
-  echo $(pgrep -l java | wc -l)
+  echo $(pgrep -u $user_id -l java | wc -l)
 }
 
 # A loop for running pit on all of the generated tests cases by botsing
