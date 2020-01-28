@@ -2,6 +2,7 @@
 
 LIMIT=$1
 proc_threads=$2
+user_id=$3
 
 RunLimit=5
 
@@ -19,7 +20,7 @@ function waitForResources {
   echo $(pgrep -l java | wc -l)
   echo "Continuing once below $((LIMIT-(proc_threads-1)))"
   # If the number of active processes reaches the limit, we will wait, in the following loop, until the end of one of the EvoSuite executions.
-  while (( $(pgrep -l java | wc -l) >= $((LIMIT-(proc_threads-1))) ))
+  while (( $(pgrep -u $user_id -l java | wc -l) >= $((LIMIT-(proc_threads-1))) ))
   do
     sleep 1
   done
