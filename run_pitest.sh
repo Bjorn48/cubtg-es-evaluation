@@ -71,7 +71,7 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
         outDir="pitest/out/cub_test_gen/$configuration/$project_name-$target_class-$clone_seed_p-$execution_id"
         mutableCPs=$(python pitest/scripts/python/export_mutable_cps.py $projectCP)
 
-
+		# The java command has to point to a Java 8 executable
         java -cp $classPaths org.pitest.mutationtest.commandline.MutationCoverageReport \
       --reportDir $outDir \
       --targetClasses $target_class \
