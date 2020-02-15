@@ -32,7 +32,7 @@ if [ -d "$generatedTestDir" ]; then
 else
   java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
    -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_def-$i" \
-   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
+   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:INPUT:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
    -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,InputCoverage,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount,configuration_id \
    -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_def/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_def/$project-$class-$i-err.txt" &
 
@@ -49,7 +49,7 @@ if [ -d "$generatedTestDir" ]; then
 else
   java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
    -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_max_sec_max-$i" \
-   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT -Dsearch_budget=$search_budget \
+   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:INPUT:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT -Dsearch_budget=$search_budget \
    -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
    -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,InputCoverage,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount,configuration_id \
    -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_max_sec_max/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_max_sec_max/$project-$class-$i-err.txt" &
@@ -67,7 +67,7 @@ if [ -d "$generatedTestDir" ]; then
 else
   java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
    -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_min_sec_min-$i" \
-   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
+   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:INPUT:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
    -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
    -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,InputCoverage,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount,configuration_id \
    -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_min_sec_min/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_min_sec_min/$project-$class-$i-err.txt" &
@@ -85,7 +85,7 @@ if [ -d "$generatedTestDir" ]; then
 else
   java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
    -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_max-$i" \
-   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
+   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:INPUT:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
    -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
    -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,InputCoverage,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount,configuration_id \
    -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_max/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_max/$project-$class-$i-err.txt" &
@@ -103,7 +103,7 @@ if [ -d "$generatedTestDir" ]; then
 else
   java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
    -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_def_sec_min-$i" \
-   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
+   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:INPUT:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH -Dsearch_budget=$search_budget \
    -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
    -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,InputCoverage,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount,configuration_id \
    -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_def_sec_min/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_def_sec_min/$project-$class-$i-err.txt" &
@@ -121,7 +121,7 @@ if [ -d "$generatedTestDir" ]; then
 else
   java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -generateMOSuite -Dstrategy=MOSUITE -Dalgorithm=MOSA -Dstop_zero=false \
    -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-fit_max_min_sec_def-$i" \
-   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
+   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:INPUT:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
    -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,InputCoverage,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount,configuration_id \
    -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/fit_max_min_sec_def/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/fit_max_min_sec_def/$project-$class-$i-err.txt" &
 
@@ -139,7 +139,7 @@ if [ -d "$generatedTestDir" ]; then
 else
   java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -Dalgorithm=NSGAII -Dstop_zero=false \
    -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-nsgaii_max-$i" \
-   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT -Dsearch_budget=$search_budget \
+   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:INPUT:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MAX_EXEC_COUNT -Dsearch_budget=$search_budget \
    -Dsecondary_objectives=total_length:max_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
    -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,InputCoverage,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount,configuration_id \
    -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/nsgaii_max/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/nsgaii_max/$project-$class-$i-err.txt" &
@@ -157,7 +157,7 @@ if [ -d "$generatedTestDir" ]; then
 else
   java -d64 -Xmx4000m -jar evosuite-master-1.0.7-SNAPSHOT.jar -Dalgorithm=NSGAII -Dstop_zero=false \
    -Dshow_progress=FALSE -Dexe_count_file="$exe_count_file" -Dconfiguration_id="$class-nsgaii_min-$i" \
-   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
+   -Dcriterion=LINE:BRANCH:EXCEPTION:WEAKMUTATION:INPUT:OUTPUT:METHOD:METHODNOEXCEPTION:CBRANCH:MIN_EXEC_COUNT -Dsearch_budget=$search_budget \
    -Dsecondary_objectives=total_length:min_exec_count -Dsecondary_objective_voting=weighted -Dsecondary_objective_weights=1:2 \
    -Doutput_variables=TARGET_CLASS,strategy,algorithm,criterion,secondary_objectives,search_budget,Lines,Covered_Lines,LineCoverage,Total_Branches,Covered_Branches,BranchCoverage,ExceptionCoverage,WeakMutationScore,InputCoverage,OutputCoverage,MethodCoverage,MethodNoExceptionCoverage,CBranchCoverage,Size,Statements_Executed,Total_Time,random_seed,Generations,SummedAverageExecutionCount,configuration_id \
    -projectCP "$projectCP" -class "$class" -Dtest_dir="$generatedTestDir" > "logs/cub_test_gen/nsgaii_min/$project-$class-$i-out.txt" 2> "logs/cub_test_gen/nsgaii_min/$project-$class-$i-err.txt" &
