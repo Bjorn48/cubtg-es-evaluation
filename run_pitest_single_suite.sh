@@ -2,7 +2,7 @@ scaffoldingTest=$1
 RunLimit=$2
 proc_threads=$3
 
-# Collect all of the useful stuff like project name, target class, etc.
+# Collect test suite information, like project name, target class, etc.
 echo "Processing file '$scaffoldingTest'"
 IFS='/' read -r -a dirs <<< "$scaffoldingTest"
 configuration="${dirs[2]}"
@@ -27,7 +27,7 @@ scaffodlingClassPathEntryDir="generated_tests/cub_test_gen/$configuration/$folde
 find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
   javac -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" $mainTest
 
-  # 3- Run the main test for 5 times. if it fails even once, we count it as a flaky test and we will ignore it.
+  # 3- Run the main test for 5 times. if it fails even once, we count it as a flaky test and we will ignore it
   for ((run=1;run<=RunLimit;run++))
   do
     java -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" org.junit.runner.JUnitCore $target_class"_ESTest" > $scaffodlingClassPathEntryDir/junit_result.txt
@@ -49,7 +49,7 @@ find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
     fi
    done
 
-    # 4- Compile main tests again after potential changes (changes = add @ignore to flaky test cases).
+    # 4- Compile main tests again after potential changes (changes = add @ignore to flaky test cases)
     javac -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" $mainTest
 
     pitestLibs=$(ls -d -1 "pitest/libs/pitest/"* | tr '\n' ':')
@@ -60,19 +60,21 @@ find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
     outDir="pitest/out/cub_test_gen/$configuration/$project_name-$target_class-$clone_seed_p-$execution_id"
     mutableCPs=$(python pitest/scripts/python/export_mutable_cps.py $projectCP)
 
-# The java command has to point to a Java 8 executable
+    # The java command has to point to Java 8
     java -cp $classPaths org.pitest.mutationtest.commandline.MutationCoverageReport \
-  --reportDir $outDir \
-  --targetClasses $target_class \
-  --targetTests $target_class"_ESTest" \
-  --mutableCodePaths "$mutableCPs" \
-  --testPlugin evosuite \
-  --sourceDirs $sourceDirs \
-  --mutators ALL \
-  --timestampedReports=false \
-  --outputFormats "HTML,XML,CSV" \
-  --threads $proc_threads &
+      --reportDir $outDir \
+      --targetClasses $target_class \
+      --targetTests $target_class"_ESTest" \
+      --mutableCodePaths "$mutableCPs" \
+      --testPlugin evosuite \
+      --sourceDirs $sourceDirs \
+      --mutators ALL \
+      --timestampedReports=false \
+      --outputFormats "HTML,XML,CSV" \
+      --threads $proc_threads &
 
-  pitPid=$!
-  java -jar pitest/libs/process-timeout-monitor.jar $pitPid "$outDir"
+    # Monitor process completion, and remove stalled processes if needed
+    pitPid=$!
+    # This command has to point to Java 11+
+    java -jar pitest/libs/process-timeout-monitor.jar $pitPid "$outDir"
 done

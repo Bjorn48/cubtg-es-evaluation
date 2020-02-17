@@ -28,7 +28,7 @@ function waitForResources {
   echo $(pgrep -u $user_id -l java | wc -l)
 }
 
-# A loop for running pit on all of the generated tests cases by botsing
+# A loop for running pit on all of the generated tests suites
 num_tests=$(find generated_tests -type f -name "*_scaffolding.java" | wc -l)
 proc_tests=0
 
