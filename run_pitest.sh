@@ -62,8 +62,32 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
     find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
       javac -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" $mainTest
 
-         pitestLibs=$(ls -d -1 "pitest/libs/pitest/"* | tr '\n' ':')
+      # 3- Run the main test for 5 times. if it fails even once, we count it as a flaky test and we will ignore it.
+      for ((run=1;run<=RunLimit;run++))
+      do
+        java -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" org.junit.runner.JUnitCore $target_class"_ESTest" > $scaffodlingClassPathEntryDir/junit_result.txt
+        failingTestsOutput=$(python pitest/scripts/python/parse_failing_tests.py "$scaffodlingClassPathEntryDir/junit_result.txt")
+        read -r -a array <<< "$failingTestsOutput"
+        for index in "${!array[@]}"
+        do
+          containsElement "${array[index]}" "${flaky_tests[@]}"
+          if [[ "$?" -eq "0" ]]; then
+            flaky_tests+=("${array[index]}")
+          fi
+        done
+        printf 'The test is: %s\n' "${flaky_tests[@]}"
 
+        if (( ${#flaky_tests[@]} )); then
+          for mainTest in `find $resultDir -name "*_ESTest.java" -type f`; do
+            java -jar pitest/libs/flaky_related/IgnoreAdder.jar $mainTest "${flaky_tests[@]}"
+          done
+        fi
+       done
+
+        # 4- Compile main tests again after potential changes (changes = add @ignore to flaky test cases).
+        javac -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" $mainTest
+
+        pitestLibs=$(ls -d -1 "pitest/libs/pitest/"* | tr '\n' ':')
 
         # 5- Run pitest
         classPaths="$projectCP$test_execution_libs$scaffodlingClassPathEntryDir:$pitestLibs"
