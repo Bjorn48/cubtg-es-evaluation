@@ -68,10 +68,6 @@ find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
       --mutators ALL \
       --timestampedReports=false \
       --outputFormats "HTML,XML,CSV" \
-      --threads $proc_threads &
-
-    # Monitor process completion, and remove stalled processes if needed
-    pitPid=$!
-    # This command has to point to Java 11+
-    java -jar pitest/libs/process-timeout-monitor.jar $pitPid "$outDir"
+      --threads $proc_threads \
+	    --verbose=true &
 done
