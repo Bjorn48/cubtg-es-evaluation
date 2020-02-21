@@ -28,6 +28,10 @@ function waitForResources {
   echo $(pgrep -u $user_id -l java | wc -l)
 }
 
+# Start a monitor which kills stuck PIT processes
+./stuck_pit_monitor &
+stuck_monitor_pid=$!
+
 # A loop for running pit on all of the generated tests suites
 num_tests=$(find generated_tests -type f -name "*_scaffolding.java" | wc -l)
 proc_tests=0
@@ -37,12 +41,15 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
     ((proc_tests+=1))
     echo "Processing test: $proc_tests / $num_tests"
 
-	echo "Processing file '$scaffoldingTest'"
-	IFS='/' read -r -a dirs <<< "$scaffoldingTest"
-	configuration="${dirs[2]}"
-	echo "configuration: "$configuration
-	folderName="${dirs[3]}"
+    echo "Processing file '$scaffoldingTest'"
+    IFS='/' read -r -a dirs <<< "$scaffoldingTest"
+    configuration="${dirs[2]}"
+    echo "configuration: "$configuration
+    folderName="${dirs[3]}"
 
     ./run_pitest_single_suite.sh $scaffoldingTest $configuration $folderName $RunLimit \
      $proc_threads > "logs-pitest/cub-test-gen/$configuration/$folderName.log" 2> "logs-pitest/cub-test-gen/$configuration/$folderName.err" &
 done
+
+# Kill stuck monitor
+pkill -9 $stuck_monitor_pid
