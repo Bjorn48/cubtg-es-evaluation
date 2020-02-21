@@ -37,6 +37,12 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
     ((proc_tests+=1))
     echo "Processing test: $proc_tests / $num_tests"
 
-    ./run_pitest_single_suite.sh $scaffoldingTest $RunLimit \
+	echo "Processing file '$scaffoldingTest'"
+	IFS='/' read -r -a dirs <<< "$scaffoldingTest"
+	configuration="${dirs[2]}"
+	echo "configuration: "$configuration
+	folderName="${dirs[3]}"
+
+    ./run_pitest_single_suite.sh $scaffoldingTest $configuration $folderName $RunLimit \
      $proc_threads > "logs-pitest/cub-test-gen/$configuration/$folderName.log" 2> "logs-pitest/cub-test-gen/$configuration/$folderName.err" &
 done

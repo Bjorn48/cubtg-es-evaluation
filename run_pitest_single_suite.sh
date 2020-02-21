@@ -1,13 +1,10 @@
 scaffoldingTest=$1
-RunLimit=$2
-proc_threads=$3
+configuration=$2
+folderName=$3
+RunLimit=$4
+proc_threads=$5
 
 # Collect test suite information, like project name, target class, etc.
-echo "Processing file '$scaffoldingTest'"
-IFS='/' read -r -a dirs <<< "$scaffoldingTest"
-configuration="${dirs[2]}"
-echo "configuration: "$configuration
-folderName="${dirs[3]}"
 IFS='-' read -r -a usefulStuff <<< "$folderName"
 project_name="${usefulStuff[0]}"
 target_class="${usefulStuff[1]}"
