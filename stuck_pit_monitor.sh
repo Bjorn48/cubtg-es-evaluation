@@ -4,9 +4,14 @@ while true
 do
   pgrep -f "org\.pitest\..+Minion" | while read current_pid
   do
-    if [ "$(ps -o etimes= -p $current_pid)" -gt 1800 ] || [ "$(ps -o ppid= -p $current_pid)" -eq 1 ]
+    exec_time="$(ps -o etimes= -p $current_pid | tr -d '[:space:]')"
+    parent_pid="$(ps -o ppid= -p $current_pid)"
+    if [[ $exec_time =~ ^[0-9]+$ ]] && [[ $parent_pid =~ ^[0-9]+$ ]]
     then
-      echo $current_pid
+      if [ "$exec_time" -gt 1800 ] || [ "$parent_pid" -eq 1 ]
+      then
+        echo $current_pid
+      fi
     fi
   done | while read pid_to_kill
   do
