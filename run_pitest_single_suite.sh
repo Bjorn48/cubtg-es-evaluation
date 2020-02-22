@@ -18,7 +18,7 @@ function execute_pit {
       --timestampedReports=false \
       --outputFormats "HTML,XML,CSV" \
       --threads $proc_threads \
-	    --verbose=true
+	    --verbose=true > "$out_file" 2> "$err_file"
 }
 
 # Collect test suite information, like project name, target class, etc.
@@ -62,7 +62,10 @@ find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
         java -jar pitest/libs/flaky_related/pit-log-test-fail-detector.jar $err_file | xargs -I {} java -jar pitest/libs/flaky_related/IgnoreAdder.jar $mainTest {}
         javac -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" $mainTest
 
-        rm -r $outDir
+        rm -r "$outDir"
+        rm "$out_file"
+        rm "$err_file"
+
         execute_pit
         ((flaky_retries+=1))
       else

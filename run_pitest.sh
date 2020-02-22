@@ -51,7 +51,7 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
     err_file="logs-pitest/cub-test-gen/$configuration/$folderName.err"
 
     ./run_pitest_single_suite.sh $scaffoldingTest $configuration $folderName \
-     $proc_threads $out_file $err_file > "$out_file" 2> "$err_file" &
+     $proc_threads $out_file $err_file &
 done
 
 # Kill stuck monitor
