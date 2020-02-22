@@ -59,6 +59,8 @@ find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
       if grep -Eq "SEVERE : .+\[testClass=.+, name=(.+)\] did not pass without mutation\." "$err_file"
       then
         java -jar pitest/libs/flaky_related/pit-log-test-fail-detector.jar $err_file | xargs -I {} java -jar pitest/libs/flaky_related/IgnoreAdder.jar $mainTest {}
+        javac -cp "$projectCP$test_execution_libs$scaffodlingClassPathEntryDir" $mainTest
+
         rm -r $outDir
         rm $out_file
         rm $err_file
