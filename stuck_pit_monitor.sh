@@ -10,7 +10,7 @@ do
     fi
   done | while read pid_to_kill
   do
-    ps -o args -p $pid_to_kill &>> './killed-pit-processes.log'
+    ps -o args= -p $pid_to_kill &>> './killed-pit-processes.log'
     kill -9 $pid_to_kill
   done
   sleep 30
