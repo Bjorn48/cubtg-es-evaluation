@@ -56,7 +56,7 @@ find $testDir -type f -name "*_ESTest.java" | while read mainTest; do
     flaky_retries=0
     while [ $contains_flaky -eq 1 ] && [ $flaky_retries -lt 5 ]
     do
-      if grep -q "SEVERE : .+\[testClass=.+, name=(.+)\] did not pass without mutation\." "$err_file"
+      if grep -Eq "SEVERE : .+\[testClass=.+, name=(.+)\] did not pass without mutation\." "$err_file"
       then
         java -jar pitest/libs/flaky_related/pit-log-test-fail-detector.jar $err_file | xargs -I {} java -jar pitest/libs/flaky_related/IgnoreAdder.jar $mainTest {}
         rm -r $outDir
