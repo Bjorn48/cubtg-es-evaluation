@@ -10,7 +10,7 @@ do
     fi
   done | while read pid_to_kill
   do
-    ps -o args= -p $pid_to_kill &>> './killed-pit-processes.log'
+    echo "Killing PIT process $(ps -o pid=,args= -p $pid_to_kill)" | tee -a './killed-pit-processes.log'
     kill -9 $pid_to_kill
   done
   sleep 30
