@@ -29,7 +29,7 @@ function waitForResources {
 }
 
 # Start a monitor which kills stuck PIT processes
-./stuck_pit_monitor &
+./stuck_pit_monitor.sh &
 stuck_monitor_pid=$!
 
 # A loop for running pit on all of the generated tests suites
@@ -47,8 +47,11 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
     echo "configuration: "$configuration
     folderName="${dirs[3]}"
 
-    ./run_pitest_single_suite.sh $scaffoldingTest $configuration $folderName $RunLimit \
-     $proc_threads > "logs-pitest/cub-test-gen/$configuration/$folderName.log" 2> "logs-pitest/cub-test-gen/$configuration/$folderName.err" &
+    out_file="logs-pitest/cub-test-gen/$configuration/$folderName.log"
+    err_file="logs-pitest/cub-test-gen/$configuration/$folderName.err"
+
+    ./run_pitest_single_suite.sh $scaffoldingTest $configuration $folderName \
+     $proc_threads $out_file $err_file > "$out_file" 2> "$err_file" &
 done
 
 # Kill stuck monitor
