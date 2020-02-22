@@ -1,9 +1,9 @@
 scaffoldingTest=$1
 configuration=$2
 folderName=$3
-proc_threads=$5
-out_file=$6
-err_file=$7
+proc_threads=$4
+out_file=$5
+err_file=$6
 
 function execute_pit {
     # The java command has to point to Java 8
