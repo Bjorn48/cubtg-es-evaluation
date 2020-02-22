@@ -18,7 +18,7 @@ function execute_pit {
       --timestampedReports=false \
       --outputFormats "HTML,XML,CSV" \
       --threads $proc_threads \
-	    --verbose=true &
+	    --verbose=true
 }
 
 # Collect test suite information, like project name, target class, etc.
