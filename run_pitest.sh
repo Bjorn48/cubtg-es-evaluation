@@ -55,4 +55,4 @@ find generated_tests -type f -name "*_scaffolding.java" | while read scaffolding
 done
 
 # Kill stuck monitor
-pkill -9 $stuck_monitor_pid
+kill -9 $stuck_monitor_pid
