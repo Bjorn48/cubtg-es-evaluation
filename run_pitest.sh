@@ -4,8 +4,6 @@ LIMIT=$1
 proc_threads=$2
 user_id=$3
 
-RunLimit=5
-
 # Check if an array contains the given element
 containsElement () {
   local e match="$1"
