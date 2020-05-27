@@ -12,7 +12,13 @@ This tool needs the following inputs:
 we want to generate unit tests for. The first column of this CSV file is the name of the target
 class, and the second one indicates the project name.
 - **execution count file:** A file containing the execution counts for the software under test,
-originating from preceding executions of the software (during production use, for example).
+originating from preceding executions of the software (during production use, for example). For the
+format of this file, see
+[the repository of the EvoSuite fork that is used for this evaluation](https://github.com/STAMP-project/evosuite-ramp/tree/cub-test-gen).
+It contains both a
+[JSON schema](https://github.com/STAMP-project/evosuite-ramp/blob/cub-test-gen/client/src/main/java/org/evosuite/coverage/execcount/execution-count-schema.json)
+and a
+[JSON example](https://github.com/STAMP-project/evosuite-ramp/blob/cub-test-gen/client/src/main/java/org/evosuite/coverage/execcount/execution-count-example.json).
 
 ## Running the test generation
 Execute the following command. Parameters are in angled brackets and are described below.
@@ -26,7 +32,8 @@ configuration.
 format described above under *Required inputs*.
 - **#processes limit:** The maximum number of EvoSuite processes that may be running at once.
 Note that EvoSuite by default spawns two processes (master and client) for each execution.
-- **search_budget:** The search budget to be used by EvoSuite
+- **search_budget:** The search budget to be used by EvoSuite (i.e., the maximum number of seconds
+used for generation).
 - **exec_count_file:** Path to the execution count file as described above under *Required inputs*.
 
 ## Output
