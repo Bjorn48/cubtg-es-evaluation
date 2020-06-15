@@ -1,0 +1,3 @@
+[submodule "docker-structure"]
+	path = docker-structure
+	url = git@github.com:Bjorn48/cubtg-es-evaluation-docker.git
